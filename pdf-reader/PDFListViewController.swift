@@ -33,9 +33,11 @@ enum PDF: Int {
         }
     }
     
-    static var count: Int {
-        return 3
-    }
+    static let count: Int = {
+        var max: Int = 0
+        while let _ = PDF(rawValue: ++max) {}
+        return max
+    }()
 }
 
 class PDFListViewController: UITableViewController {
