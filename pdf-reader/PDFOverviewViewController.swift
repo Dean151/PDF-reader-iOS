@@ -90,12 +90,22 @@ class PDFOverviewViewController: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageCell", forIndexPath: indexPath) as! ImageCell
+        cell.indexPath = indexPath
         
         let pageNumber = indexPath.row+1
+        cell.backgroundColor = UIColor.whiteColor()
         cell.pageLabel.text = "\(pageNumber)"
+        cell.imageView.image = nil
         
-        if let image = self.imageFromPDFWithPage(pageNumber) {
-            cell.imageView.image = image
+        // Keeping expensive process to be in main queue for a smooth scrolling experience
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+        let image = self.imageFromPDFWithPage(pageNumber)
+            dispatch_async(dispatch_get_main_queue()) {
+                // Changing the image only if the cell is on screen
+                if cell.indexPath == indexPath {
+                    cell.imageView.image = image;
+                }
+            }
         }
         
         return cell

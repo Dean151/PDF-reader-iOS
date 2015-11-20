@@ -73,6 +73,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView) {
         if let page = self.shouldShowPage {
+            self.shouldShowPage = nil // Prevent for changing page again
             self.goToPage(page)
         }
     }
