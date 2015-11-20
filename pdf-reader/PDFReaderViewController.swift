@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  PDFReaderViewController.swift
 //  pdf-reader
 //
 //  Created by Thomas Durand on 20/11/2015.
@@ -8,12 +8,11 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class PDFReaderViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
-
-
-    var detailItem: AnyObject? {
+    @IBOutlet weak var webview: UIWebView!
+    
+    var pdf: PDF? {
         didSet {
             // Update the view.
             self.configureView()
@@ -22,17 +21,21 @@ class DetailViewController: UIViewController {
 
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.description
-            }
-        }
+        guard let pdf = self.pdf else { print("no pdf"); return }
+        self.navigationItem.title = pdf.name
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        // Opening pdf file
+        guard let url = pdf?.fileURL else { print("no URL for file"); return }
+        let request = NSURLRequest(URL: url)
+        webview.loadRequest(request)
     }
 
     override func didReceiveMemoryWarning() {
