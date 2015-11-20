@@ -43,7 +43,7 @@ class PDFOverviewViewController: UICollectionViewController {
         guard let document = self.document else { print("no document"); return nil }
         
         let docPage = CGPDFDocumentGetPage(document, page)
-        let pageRect:CGRect = CGPDFPageGetBoxRect(docPage, .MediaBox);
+        let pageRect:CGRect = CGPDFPageGetBoxRect(docPage, .MediaBox)
         
         return pageRect
     }
@@ -53,16 +53,16 @@ class PDFOverviewViewController: UICollectionViewController {
         let docPage = CGPDFDocumentGetPage(document, page)
         let pageRect = self.rectFromPDFWithPage(page)!
         
-        UIGraphicsBeginImageContext(pageRect.size);
-        let context:CGContextRef = UIGraphicsGetCurrentContext()!;
-        CGContextSetRGBFillColor(context, 1.0,1.0,1.0,1.0);
-        CGContextFillRect(context,pageRect);
-        CGContextSaveGState(context);
-        CGContextTranslateCTM(context, 0.0, pageRect.size.height);
-        CGContextScaleCTM(context, 1.0, -1.0);
-        CGContextConcatCTM(context, CGPDFPageGetDrawingTransform(docPage, .MediaBox, pageRect, 0, true));
-        CGContextDrawPDFPage(context, docPage);
-        CGContextRestoreGState(context);
+        UIGraphicsBeginImageContext(pageRect.size)
+        let context:CGContextRef = UIGraphicsGetCurrentContext()!
+        CGContextSetRGBFillColor(context, 1.0,1.0,1.0,1.0)
+        CGContextFillRect(context,pageRect)
+        CGContextSaveGState(context)
+        CGContextTranslateCTM(context, 0.0, pageRect.size.height)
+        CGContextScaleCTM(context, 1.0, -1.0)
+        CGContextConcatCTM(context, CGPDFPageGetDrawingTransform(docPage, .MediaBox, pageRect, 0, true))
+        CGContextDrawPDFPage(context, docPage)
+        CGContextRestoreGState(context)
         
         let image:UIImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

@@ -104,7 +104,6 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="70o-zf-f0o" firstAttribute="top" secondItem="c9W-Ho-9DV" secondAttribute="top" id="0pP-S3-ePC"/>
                                     <constraint firstAttribute="bottom" secondItem="70o-zf-f0o" secondAttribute="bottom" id="GcP-UG-gKa"/>

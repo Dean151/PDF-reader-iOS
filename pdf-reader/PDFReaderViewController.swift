@@ -25,12 +25,10 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     func configureView() {
         // Update the user interface for the detail item.
         guard let pdf = self.pdf else {
-            print("no pdf");
-            self.navigationItem.rightBarButtonItem?.enabled = false
+            print("no pdf")
             return
         }
         self.navigationItem.title = pdf.name
-        self.navigationItem.rightBarButtonItem?.enabled = true
     }
 
     override func viewDidLoad() {
@@ -42,9 +40,20 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         // Opening pdf file
-        guard let url = pdf?.fileURL else { print("no URL for file"); return }
+        guard let url = pdf?.fileURL else {
+            print("no URL for file")
+            self.navigationItem.rightBarButtonItem?.enabled = false
+            let url = NSBundle.mainBundle().URLForResource("nofile", withExtension: "html")!
+            let request = NSURLRequest(URL: url)
+            webview.loadRequest(request)
+            webview.scrollView.scrollEnabled = false
+            return
+        }
+        
+        self.navigationItem.rightBarButtonItem?.enabled = true
         let request = NSURLRequest(URL: url)
         webview.loadRequest(request)
+        webview.scrollView.scrollEnabled = true
     }
 
     override func didReceiveMemoryWarning() {

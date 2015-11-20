@@ -18,6 +18,7 @@
 		E9E91CAD1BFF58C800CCB795 /* pdfsample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CAA1BFF58C800CCB795 /* pdfsample.pdf */; };
 		E9E91CB01BFF684600CCB795 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */; };
 		E9E91CB21BFF6D1F00CCB795 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */; };
+		E9E91CB41BFF7E9800CCB795 /* nofile.html in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CB31BFF7E9800CCB795 /* nofile.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		E9E91CAA1BFF58C800CCB795 /* pdfsample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pdfsample.pdf; sourceTree = "<group>"; };
 		E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
 		E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		E9E91CB31BFF7E9800CCB795 /* nofile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = nofile.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				E9E91C9D1BFF57C800CCB795 /* Assets.xcassets */,
 				E9E91C9F1BFF57C800CCB795 /* LaunchScreen.storyboard */,
 				E9E91CA21BFF57C800CCB795 /* Info.plist */,
+				E9E91CB31BFF7E9800CCB795 /* nofile.html */,
 				E9E91CA81BFF58C800CCB795 /* latexsample.pdf */,
 				E9E91CA91BFF58C800CCB795 /* pdfdocuments.pdf */,
 				E9E91CAA1BFF58C800CCB795 /* pdfsample.pdf */,
@@ -146,6 +149,7 @@
 				E9E91CAC1BFF58C800CCB795 /* pdfdocuments.pdf in Resources */,
 				E9E91C9E1BFF57C800CCB795 /* Assets.xcassets in Resources */,
 				E9E91C9C1BFF57C800CCB795 /* Main.storyboard in Resources */,
+				E9E91CB41BFF7E9800CCB795 /* nofile.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
