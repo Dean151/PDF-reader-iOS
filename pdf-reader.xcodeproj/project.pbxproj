@@ -16,6 +16,8 @@
 		E9E91CAB1BFF58C800CCB795 /* latexsample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CA81BFF58C800CCB795 /* latexsample.pdf */; };
 		E9E91CAC1BFF58C800CCB795 /* pdfdocuments.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CA91BFF58C800CCB795 /* pdfdocuments.pdf */; };
 		E9E91CAD1BFF58C800CCB795 /* pdfsample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CAA1BFF58C800CCB795 /* pdfsample.pdf */; };
+		E9E91CB01BFF684600CCB795 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */; };
+		E9E91CB21BFF6D1F00CCB795 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		E9E91CA81BFF58C800CCB795 /* latexsample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = latexsample.pdf; sourceTree = "<group>"; };
 		E9E91CA91BFF58C800CCB795 /* pdfdocuments.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pdfdocuments.pdf; sourceTree = "<group>"; };
 		E9E91CAA1BFF58C800CCB795 /* pdfsample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pdfsample.pdf; sourceTree = "<group>"; };
+		E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
+		E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 				E9E91C941BFF57C800CCB795 /* AppDelegate.swift */,
 				E9E91C961BFF57C800CCB795 /* PDFListViewController.swift */,
 				E9E91C981BFF57C800CCB795 /* PDFReaderViewController.swift */,
+				E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */,
+				E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */,
 				E9E91C9A1BFF57C800CCB795 /* Main.storyboard */,
 				E9E91C9D1BFF57C800CCB795 /* Assets.xcassets */,
 				E9E91C9F1BFF57C800CCB795 /* LaunchScreen.storyboard */,
@@ -150,8 +156,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9E91CB21BFF6D1F00CCB795 /* ImageCell.swift in Sources */,
 				E9E91C991BFF57C800CCB795 /* PDFReaderViewController.swift in Sources */,
 				E9E91C971BFF57C800CCB795 /* PDFListViewController.swift in Sources */,
+				E9E91CB01BFF684600CCB795 /* PDFOverviewViewController.swift in Sources */,
 				E9E91C951BFF57C800CCB795 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

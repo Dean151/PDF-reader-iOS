@@ -8,9 +8,10 @@
 
 import UIKit
 
-class PDFReaderViewController: UIViewController {
+class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     @IBOutlet weak var webview: UIWebView!
+    var shouldShowPage: Int?
     
     var pdf: PDF? {
         didSet {
@@ -28,6 +29,7 @@ class PDFReaderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.webview.delegate = self
         self.configureView()
     }
     
@@ -43,6 +45,37 @@ class PDFReaderViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showOverview" {
+            if let pdf = self.pdf {
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PDFOverviewViewController
+                controller.pdf = pdf
+                controller.parentVC = self
+            }
+        }
+    }
+    
+    func webViewDidFinishLoad(webView: UIWebView) {
+        if let page = self.shouldShowPage {
+            self.goToPage(page)
+        }
+    }
+    
+    func goToPage(page: Int) {
+        guard let url = pdf?.fileURL else { return }
+        let paddingSize = 10
+        
+        let document = CGPDFDocumentCreateWithURL(url)
+        let nbPages = CGPDFDocumentGetNumberOfPages(document)
+        
+        let allHeight = self.webview.scrollView.contentSize.height
+        let allPadding = CGFloat(paddingSize * (nbPages+1))
+        let pageHeight = (allHeight-allPadding)/CGFloat(nbPages)
+        
+        if page <= nbPages && page >= 0 {
+            let offsetPoint = CGPointMake(0, CGFloat(paddingSize*(page-1))+(pageHeight*CGFloat(page-1)))
+            self.webview.scrollView.setContentOffset(offsetPoint, animated: false)
+        }
+    }
 }
 

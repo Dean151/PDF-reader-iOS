@@ -41,11 +41,10 @@ enum PDF: Int {
 class PDFListViewController: UITableViewController {
 
     var detailViewController: PDFReaderViewController? = nil
-    var objects = [AnyObject]()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
         if let split = self.splitViewController {
             let controllers = split.viewControllers
