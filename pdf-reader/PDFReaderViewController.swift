@@ -14,11 +14,14 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet weak var overviewButton: UIBarButtonItem!
     
     var shouldShowPage: Int?
+    var shouldReload = false
     
     var pdf: PDF? {
         didSet {
             // Update the view.
             self.configureView()
+            self.shouldReload = true
+            self.shouldShowPage = nil
         }
     }
 
@@ -49,11 +52,15 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
             webview.scrollView.scrollEnabled = false
             return
         }
-        
-        self.navigationItem.rightBarButtonItem?.enabled = true
-        let request = NSURLRequest(URL: url)
-        webview.loadRequest(request)
-        webview.scrollView.scrollEnabled = true
+        if shouldReload {
+            self.navigationItem.rightBarButtonItem?.enabled = true
+            let request = NSURLRequest(URL: url)
+            webview.loadRequest(request)
+            webview.scrollView.scrollEnabled = true
+            shouldReload = false
+        } else {
+            self.changePage()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,6 +79,10 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {
+        self.changePage()
+    }
+    
+    func changePage() {
         if let page = self.shouldShowPage {
             self.shouldShowPage = nil // Prevent for changing page again
             self.goToPage(page)
