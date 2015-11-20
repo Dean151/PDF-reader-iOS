@@ -19,6 +19,7 @@
 		E9E91CB01BFF684600CCB795 /* PDFOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */; };
 		E9E91CB21BFF6D1F00CCB795 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */; };
 		E9E91CB41BFF7E9800CCB795 /* nofile.html in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CB31BFF7E9800CCB795 /* nofile.html */; };
+		E9E91CBB1BFF9C3100CCB795 /* iosreverseengineering.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E9E91CBA1BFF9C3100CCB795 /* iosreverseengineering.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		E9E91CAF1BFF684600CCB795 /* PDFOverviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFOverviewViewController.swift; sourceTree = "<group>"; };
 		E9E91CB11BFF6D1F00CCB795 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		E9E91CB31BFF7E9800CCB795 /* nofile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = nofile.html; sourceTree = "<group>"; };
+		E9E91CBA1BFF9C3100CCB795 /* iosreverseengineering.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = iosreverseengineering.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				E9E91CA81BFF58C800CCB795 /* latexsample.pdf */,
 				E9E91CA91BFF58C800CCB795 /* pdfdocuments.pdf */,
 				E9E91CAA1BFF58C800CCB795 /* pdfsample.pdf */,
+				E9E91CBA1BFF9C3100CCB795 /* iosreverseengineering.pdf */,
 			);
 			name = Files;
 			sourceTree = "<group>";
@@ -168,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9E91CA11BFF57C800CCB795 /* LaunchScreen.storyboard in Resources */,
+				E9E91CBB1BFF9C3100CCB795 /* iosreverseengineering.pdf in Resources */,
 				E9E91CAD1BFF58C800CCB795 /* pdfsample.pdf in Resources */,
 				E9E91CAB1BFF58C800CCB795 /* latexsample.pdf in Resources */,
 				E9E91CAC1BFF58C800CCB795 /* pdfdocuments.pdf in Resources */,

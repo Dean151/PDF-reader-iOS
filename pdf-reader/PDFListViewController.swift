@@ -9,7 +9,7 @@
 import UIKit
 
 enum PDF: Int {
-    case SamplePDF=0, DocumentPDF, LatexSample
+    case SamplePDF=0, DocumentPDF, LatexSample, iOS
     
     var name: String {
         switch self {
@@ -19,6 +19,8 @@ enum PDF: Int {
             return "PDF Document"
         case .LatexSample:
             return "LaTeX Sample"
+        case .iOS:
+            return "iOS Reverse Engineering"
         }
     }
     
@@ -30,6 +32,8 @@ enum PDF: Int {
             return NSBundle.mainBundle().URLForResource("pdfdocuments", withExtension: "pdf")
         case .LatexSample:
             return NSBundle.mainBundle().URLForResource("latexsample", withExtension: "pdf")
+        case .iOS:
+            return NSBundle.mainBundle().URLForResource("iosreverseengineering", withExtension: "pdf")
         }
     }
     
