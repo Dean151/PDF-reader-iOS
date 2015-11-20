@@ -10,7 +10,10 @@ import UIKit
 
 class PDFOverviewViewController: UICollectionViewController {
     var document: CGPDFDocumentRef?
-    let widthForPage = UIScreen.mainScreen().bounds.width/4
+    
+    var widthForPage: CGFloat {
+        return UIScreen.mainScreen().bounds.width/4
+    }
     
     weak var parentVC: PDFReaderViewController?
     
@@ -36,15 +39,19 @@ class PDFOverviewViewController: UICollectionViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func rectFromPDFWithPage(page: Int) -> CGRect? {
+        guard let document = self.document else { print("no document"); return nil }
+        
+        let docPage = CGPDFDocumentGetPage(document, page)
+        let pageRect:CGRect = CGPDFPageGetBoxRect(docPage, .MediaBox);
+        
+        return pageRect
+    }
+    
     func imageFromPDFWithPage(page: Int) -> UIImage? {
         guard let document = self.document else { print("no document"); return nil }
         let docPage = CGPDFDocumentGetPage(document, page)
-        
-        let width:CGFloat = widthForPage;
-        var pageRect:CGRect = CGPDFPageGetBoxRect(docPage, .MediaBox);
-        let pdfScale:CGFloat = width/pageRect.size.width;
-        pageRect.size = CGSizeMake(pageRect.size.width*pdfScale, pageRect.size.height*pdfScale);
-        pageRect.origin = CGPointZero;
+        let pageRect = self.rectFromPDFWithPage(page)!
         
         UIGraphicsBeginImageContext(pageRect.size);
         let context:CGContextRef = UIGraphicsGetCurrentContext()!;
@@ -73,11 +80,12 @@ class PDFOverviewViewController: UICollectionViewController {
         return CGPDFDocumentGetNumberOfPages(document)
     }
     
-    // Limit : will work only with A4 pages
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let width = widthForPage
-        let height = (width * 29.7) / 21
-        return CGSize(width: width, height: height);
+        guard let pageSize = self.rectFromPDFWithPage(indexPath.row+1)?.size else { return CGSize.zero }
+        
+        let scale = widthForPage/pageSize.width
+        let height = pageSize.height*scale
+        return CGSize(width: widthForPage, height: height);
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -97,5 +105,9 @@ class PDFOverviewViewController: UICollectionViewController {
         guard let parentVC = self.parentVC else { return }
         parentVC.shouldShowPage = indexPath.row+1
         self.closeView(self)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
 }

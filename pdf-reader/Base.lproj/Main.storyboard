@@ -50,13 +50,14 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="PDF Reader" id="mOI-FS-AaM">
-                        <barButtonItem key="rightBarButtonItem" image="collection" id="tZW-Wv-Jnk">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" image="collection" id="tZW-Wv-Jnk">
                             <connections>
                                 <segue destination="Jks-ba-5Dt" kind="presentation" identifier="showOverview" id="b4k-Bq-ssi"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="overviewButton" destination="tZW-Wv-Jnk" id="FhJ-hj-C9l"/>
                         <outlet property="webview" destination="1rz-vj-9um" id="hMq-L7-5bN"/>
                     </connections>
                 </viewController>

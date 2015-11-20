@@ -11,6 +11,8 @@ import UIKit
 class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     @IBOutlet weak var webview: UIWebView!
+    @IBOutlet weak var overviewButton: UIBarButtonItem!
+    
     var shouldShowPage: Int?
     
     var pdf: PDF? {
@@ -22,8 +24,13 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     func configureView() {
         // Update the user interface for the detail item.
-        guard let pdf = self.pdf else { print("no pdf"); return }
+        guard let pdf = self.pdf else {
+            print("no pdf");
+            self.navigationItem.rightBarButtonItem?.enabled = false
+            return
+        }
         self.navigationItem.title = pdf.name
+        self.navigationItem.rightBarButtonItem?.enabled = true
     }
 
     override func viewDidLoad() {
