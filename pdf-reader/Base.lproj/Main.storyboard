@@ -228,7 +228,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="collection" width="20" height="20"/>
+        <image name="collection" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Tll-UG-LXB"/>
