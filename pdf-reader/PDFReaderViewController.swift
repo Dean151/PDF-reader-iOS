@@ -70,16 +70,36 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showOverview" {
-            if let pdf = self.pdf {
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PDFOverviewViewController
-                controller.pdf = pdf
-                controller.parentVC = self
+            guard let pdf = self.pdf else { return }
+            
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PDFOverviewViewController
+            controller.pdf = pdf
+            controller.parentVC = self
+            if let currentPage = self.currentPage {
+                controller.currentPage = currentPage
             }
         }
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {
         self.changePage()
+    }
+    
+    // MARK: - Page Handling
+    
+    var currentPage: Int? {
+        guard let url = pdf?.fileURL else { return nil }
+        let paddingSize: CGFloat = 10
+        
+        let document = CGPDFDocumentCreateWithURL(url)
+        let nbPages = CGPDFDocumentGetNumberOfPages(document)
+        
+        let allHeight = self.webview.scrollView.contentSize.height
+        let allPadding = paddingSize * CGFloat(nbPages+1)
+        let pageHeight = (allHeight-allPadding)/CGFloat(nbPages)
+        
+        let currentPage = Int( round(self.webview.scrollView.contentOffset.y / (paddingSize+pageHeight)) ) + 1
+        return currentPage
     }
     
     func changePage() {
@@ -91,17 +111,17 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     
     func goToPage(page: Int) {
         guard let url = pdf?.fileURL else { return }
-        let paddingSize = 10
+        let paddingSize: CGFloat = 10
         
         let document = CGPDFDocumentCreateWithURL(url)
         let nbPages = CGPDFDocumentGetNumberOfPages(document)
         
         let allHeight = self.webview.scrollView.contentSize.height
-        let allPadding = CGFloat(paddingSize * (nbPages+1))
+        let allPadding = paddingSize * CGFloat(nbPages+1)
         let pageHeight = (allHeight-allPadding)/CGFloat(nbPages)
         
         if page <= nbPages && page >= 0 {
-            let offsetPoint = CGPointMake(0, CGFloat(paddingSize*(page-1))+(pageHeight*CGFloat(page-1)))
+            let offsetPoint = CGPointMake(0, (paddingSize+pageHeight)*CGFloat(page-1))
             self.webview.scrollView.setContentOffset(offsetPoint, animated: false)
         }
     }

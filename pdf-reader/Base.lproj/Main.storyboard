@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Documents-->
@@ -93,10 +94,10 @@
                                             <animations/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cb9-IH-KTR">
-                                            <rect key="frame" x="53" y="60" width="14" height="36"/>
+                                            <rect key="frame" x="48.5" y="88" width="23" height="60"/>
                                             <animations/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                            <color key="textColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -109,8 +110,8 @@
                                     <constraint firstAttribute="bottom" secondItem="70o-zf-f0o" secondAttribute="bottom" id="GcP-UG-gKa"/>
                                     <constraint firstItem="Cb9-IH-KTR" firstAttribute="centerX" secondItem="c9W-Ho-9DV" secondAttribute="centerX" id="PMh-jL-5ZP"/>
                                     <constraint firstItem="70o-zf-f0o" firstAttribute="leading" secondItem="c9W-Ho-9DV" secondAttribute="leading" id="RL8-eZ-ZzH"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="Cb9-IH-KTR" secondAttribute="bottom" id="ity-jC-xku"/>
                                     <constraint firstAttribute="trailing" secondItem="70o-zf-f0o" secondAttribute="trailing" id="nuz-II-dWF"/>
-                                    <constraint firstItem="Cb9-IH-KTR" firstAttribute="centerY" secondItem="c9W-Ho-9DV" secondAttribute="centerY" id="pKL-H8-LGs"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="imageView" destination="70o-zf-f0o" id="Cql-BN-3Sn"/>

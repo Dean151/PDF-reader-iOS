@@ -10,6 +10,7 @@ import UIKit
 
 class PDFOverviewViewController: UICollectionViewController {
     var document: CGPDFDocumentRef?
+    var currentPage: Int?
     
     var widthForPage: CGFloat {
         return UIScreen.mainScreen().bounds.width/4
@@ -33,6 +34,14 @@ class PDFOverviewViewController: UICollectionViewController {
         super.viewDidLoad()
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .Plain, target: self, action: Selector("closeView:"))
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if let page = self.currentPage {
+            let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
+            self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
+        }
     }
     
     func closeView(sender: AnyObject) {
@@ -97,6 +106,16 @@ class PDFOverviewViewController: UICollectionViewController {
         cell.pageLabel.text = "\(pageNumber)"
         cell.imageView.image = nil
         
+        // Current page
+        
+        if pageNumber == currentPage {
+            cell.layer.borderColor = CGColor.selectedBlue()
+            cell.layer.borderWidth = 4
+        } else {
+            cell.layer.borderColor = nil
+            cell.layer.borderWidth = 0
+        }
+        
         // Keeping expensive process to be in main queue for a smooth scrolling experience
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
         let image = self.imageFromPDFWithPage(pageNumber)
@@ -119,5 +138,11 @@ class PDFOverviewViewController: UICollectionViewController {
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    }
+}
+
+extension CGColor {
+    static func selectedBlue() -> CGColor {
+        return UIColor.selectedBlue().CGColor
     }
 }
