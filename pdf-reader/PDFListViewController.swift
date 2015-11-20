@@ -42,8 +42,6 @@ enum PDF: Int {
 
 class PDFListViewController: UITableViewController {
 
-    var detailViewController: PDFReaderViewController? = nil
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,7 +49,6 @@ class PDFListViewController: UITableViewController {
         if let split = self.splitViewController {
             split.preferredDisplayMode = .PrimaryOverlay
             let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? PDFReaderViewController
         }
     }
 
