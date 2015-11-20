@@ -93,6 +93,13 @@ class PDFListViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
 
         cell.textLabel!.text = PDF(rawValue: indexPath.row)!.name
+        cell.selectedBackgroundView?.backgroundColor = UIColor.blueColor()
+        
+        let background = UIView()
+        background.backgroundColor = UIColor(red: (76.0/255.0), green: (161.0/255.0), blue: (255.0/255.0), alpha: 1.0)
+        background.layer.masksToBounds = true
+        cell.selectedBackgroundView = background
+        
         return cell
     }
 
