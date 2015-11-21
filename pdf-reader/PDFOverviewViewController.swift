@@ -24,6 +24,11 @@ class PDFOverviewViewController: UICollectionViewController {
         }
     }
     
+    var pdfPageNumber: Int {
+        guard let document = self.document else { return 0 }
+        return CGPDFDocumentGetNumberOfPages(document)
+    }
+    
     func configureView() {
         guard let url = self.pdf?.fileURL else { return }
         self.document = CGPDFDocumentCreateWithURL(url)
@@ -33,7 +38,8 @@ class PDFOverviewViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("closeView:"))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("closeView"))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Go to", style: .Plain, target: self, action: Selector("choosePage"))
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -44,9 +50,41 @@ class PDFOverviewViewController: UICollectionViewController {
         }
     }
     
-    func closeView(sender: AnyObject) {
+    func closeView() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    func choosePage() {
+        let alertController = UIAlertController(title: "Go to page", message: "Choose a page number between 1 and \(self.pdfPageNumber)", preferredStyle: .Alert)
+        
+        let sendAction = UIAlertAction(title: "Go", style: .Default, handler: { (action) in
+            guard let pageTextFied = alertController.textFields?[0] else { return }
+            guard let pageAsked = Int(pageTextFied.text!) else { return }
+            guard pageAsked > 0 && pageAsked <= self.pdfPageNumber else { return }
+            
+            self.goToPageInParentView(pageAsked)
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alertController.addTextFieldWithConfigurationHandler({ (textField) in
+            textField.placeholder = "Page number"
+            textField.keyboardType = UIKeyboardType.NumberPad
+        })
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(sendAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func goToPageInParentView(page: Int) {
+        guard let parentVC = self.parentVC else { return }
+        parentVC.shouldShowPage = page
+        self.closeView()
+    }
+    
+    // MARK: pdf pages handling
     
     func rectFromPDFWithPage(page: Int) -> CGRect? {
         guard let document = self.document else { print("no document"); return nil }
@@ -85,8 +123,7 @@ class PDFOverviewViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let document = self.document else { return 0 }
-        return CGPDFDocumentGetNumberOfPages(document)
+        return self.pdfPageNumber
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -131,9 +168,7 @@ class PDFOverviewViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        guard let parentVC = self.parentVC else { return }
-        parentVC.shouldShowPage = indexPath.row+1
-        self.closeView(self)
+        self.goToPageInParentView(indexPath.row+1)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {

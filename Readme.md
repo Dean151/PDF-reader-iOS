@@ -5,10 +5,10 @@ It uses split view to be compatible iPad.
 ## Features
 * List and read PDF
 * Modal overview of PDF with thumbnails
+* Jump to page number
 
 ### Todo
-* Jump to page number
-* Save a document progress
+* Save the current page when quitting ?
 
 ## Build
 Clone project and build it with Xcode.
