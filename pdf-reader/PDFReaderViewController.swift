@@ -16,7 +16,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     var shouldShowPage: Int?
     var shouldReload = false
     
-    var pdf: PDF? {
+    var pdf: PDFDocument? {
         didSet {
             // Update the view.
             self.configureView()
@@ -43,7 +43,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         // Opening pdf file
-        guard let url = pdf?.fileURL else {
+        guard let url = pdf?.url else {
             print("no URL for file")
             self.navigationItem.rightBarButtonItem?.enabled = false
             let url = NSBundle.mainBundle().URLForResource("nofile", withExtension: "html")!
@@ -88,11 +88,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     // MARK: - Page Handling
     
     var currentPage: Int? {
-        guard let url = pdf?.fileURL else { return nil }
+        guard let nbPages = pdf?.numberOfPages else { return nil }
         let paddingSize: CGFloat = 10
-        
-        let document = CGPDFDocumentCreateWithURL(url)
-        let nbPages = CGPDFDocumentGetNumberOfPages(document)
         
         let allHeight = self.webview.scrollView.contentSize.height
         let allPadding = paddingSize * CGFloat(nbPages+1)
@@ -110,11 +107,8 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     }
     
     func goToPage(page: Int) {
-        guard let url = pdf?.fileURL else { return }
+        guard let nbPages = pdf?.numberOfPages else { return }
         let paddingSize: CGFloat = 10
-        
-        let document = CGPDFDocumentCreateWithURL(url)
-        let nbPages = CGPDFDocumentGetNumberOfPages(document)
         
         let allHeight = self.webview.scrollView.contentSize.height
         let allPadding = paddingSize * CGFloat(nbPages+1)

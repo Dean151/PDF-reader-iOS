@@ -8,41 +8,7 @@
 
 import UIKit
 
-enum PDF: Int {
-    case SamplePDF=0, DocumentPDF, LatexSample, iOS
-    
-    var name: String {
-        switch self {
-        case .SamplePDF:
-            return "PDF Sample"
-        case .DocumentPDF:
-            return "PDF Document"
-        case .LatexSample:
-            return "LaTeX Sample"
-        case .iOS:
-            return "iOS Reverse Engineering"
-        }
-    }
-    
-    var fileURL: NSURL? {
-        switch self {
-        case .SamplePDF:
-            return NSBundle.mainBundle().URLForResource("pdfsample", withExtension: "pdf")
-        case .DocumentPDF:
-            return NSBundle.mainBundle().URLForResource("pdfdocuments", withExtension: "pdf")
-        case .LatexSample:
-            return NSBundle.mainBundle().URLForResource("latexsample", withExtension: "pdf")
-        case .iOS:
-            return NSBundle.mainBundle().URLForResource("iosreverseengineering", withExtension: "pdf")
-        }
-    }
-    
-    static let count: Int = {
-        var max: Int = 0
-        while let _ = PDF(rawValue: ++max) {}
-        return max
-    }()
-}
+
 
 class PDFListViewController: UITableViewController {
 
@@ -70,9 +36,13 @@ class PDFListViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                if let pdf = PDF(rawValue: indexPath.row) {
+                if let pdf = PDFList(rawValue: indexPath.row) {
                     let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PDFReaderViewController
-                    controller.pdf = pdf
+                    do {
+                        controller.pdf = try PDFDocument(pdfFromList: pdf)
+                    } catch {
+                        print("PDF could not be created")
+                    }
                     controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                     controller.navigationItem.leftItemsSupplementBackButton = true
                 }
@@ -87,13 +57,13 @@ class PDFListViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return PDF.count
+        return PDFList.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
 
-        cell.textLabel!.text = PDF(rawValue: indexPath.row)!.name
+        cell.textLabel!.text = PDFList(rawValue: indexPath.row)!.name
         cell.selectedBackgroundView?.backgroundColor = UIColor.blueColor()
         
         let background = UIView()

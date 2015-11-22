@@ -9,7 +9,6 @@
 import UIKit
 
 class PDFOverviewViewController: UICollectionViewController {
-    var document: CGPDFDocumentRef?
     var currentPage: Int?
     
     var widthForPage: CGFloat {
@@ -18,21 +17,14 @@ class PDFOverviewViewController: UICollectionViewController {
     
     weak var parentVC: PDFReaderViewController?
     
-    var pdf: PDF? {
+    var pdf: PDFDocument? {
         didSet {
-            self.configureView()
+            self.collectionView?.reloadData()
         }
     }
     
-    var pdfPageNumber: Int {
-        guard let document = self.document else { return 0 }
-        return CGPDFDocumentGetNumberOfPages(document)
-    }
-    
-    func configureView() {
-        guard let url = self.pdf?.fileURL else { return }
-        self.document = CGPDFDocumentCreateWithURL(url)
-        self.collectionView?.reloadData()
+    var document: CGPDFDocument? {
+        return self.pdf?.document
     }
     
     override func viewDidLoad() {
@@ -45,6 +37,7 @@ class PDFOverviewViewController: UICollectionViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if let page = self.currentPage {
+            guard let pdf = self.pdf where pdf.isPageInDocument(page) else { return }
             let indexPath = NSIndexPath(forRow: page-1, inSection: 0)
             self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
         }
@@ -55,12 +48,13 @@ class PDFOverviewViewController: UICollectionViewController {
     }
     
     func choosePage() {
-        let alertController = UIAlertController(title: "Go to page", message: "Choose a page number between 1 and \(self.pdfPageNumber)", preferredStyle: .Alert)
+        guard let pdf = self.pdf else { return }
+        let alertController = UIAlertController(title: "Go to page", message: "Choose a page number between 1 and \(pdf.numberOfPages)", preferredStyle: .Alert)
         
         let sendAction = UIAlertAction(title: "Go", style: .Default, handler: { (action) in
             guard let pageTextFied = alertController.textFields?[0] else { return }
             guard let pageAsked = Int(pageTextFied.text!) else { return }
-            guard pageAsked > 0 && pageAsked <= self.pdfPageNumber else { return }
+            guard pdf.isPageInDocument(pageAsked) else { return }
             
             self.goToPageInParentView(pageAsked)
         })
@@ -79,41 +73,10 @@ class PDFOverviewViewController: UICollectionViewController {
     }
     
     func goToPageInParentView(page: Int) {
+        guard let pdf = self.pdf where pdf.isPageInDocument(page) else { return }
         guard let parentVC = self.parentVC else { return }
         parentVC.shouldShowPage = page
         self.closeView()
-    }
-    
-    // MARK: pdf pages handling
-    
-    func rectFromPDFWithPage(page: Int) -> CGRect? {
-        guard let document = self.document else { print("no document"); return nil }
-        
-        let docPage = CGPDFDocumentGetPage(document, page)
-        let pageRect:CGRect = CGPDFPageGetBoxRect(docPage, .MediaBox)
-        
-        return pageRect
-    }
-    
-    func imageFromPDFWithPage(page: Int) -> UIImage? {
-        guard let document = self.document else { print("no document"); return nil }
-        let docPage = CGPDFDocumentGetPage(document, page)
-        let pageRect = self.rectFromPDFWithPage(page)!
-        
-        UIGraphicsBeginImageContext(pageRect.size)
-        let context:CGContextRef = UIGraphicsGetCurrentContext()!
-        CGContextSetRGBFillColor(context, 1.0,1.0,1.0,1.0)
-        CGContextFillRect(context,pageRect)
-        CGContextSaveGState(context)
-        CGContextTranslateCTM(context, 0.0, pageRect.size.height)
-        CGContextScaleCTM(context, 1.0, -1.0)
-        CGContextConcatCTM(context, CGPDFPageGetDrawingTransform(docPage, .MediaBox, pageRect, 0, true))
-        CGContextDrawPDFPage(context, docPage)
-        CGContextRestoreGState(context)
-        
-        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return image;
     }
     
     // MARK: - CollectionView
@@ -123,11 +86,12 @@ class PDFOverviewViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.pdfPageNumber
+        guard let pdf = self.pdf else { return 0 }
+        return pdf.numberOfPages
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        guard let pageSize = self.rectFromPDFWithPage(indexPath.row+1)?.size else { return CGSize.zero }
+        guard let pageSize = pdf?.rectFromPDFWithPage(indexPath.row+1)?.size else { return CGSize.zero }
         
         let scale = widthForPage/pageSize.width
         let height = pageSize.height*scale
@@ -155,11 +119,11 @@ class PDFOverviewViewController: UICollectionViewController {
         
         // Keeping expensive process to be in main queue for a smooth scrolling experience
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-        let image = self.imageFromPDFWithPage(pageNumber)
+        guard let image = self.pdf?.imageFromPDFWithPage(pageNumber) else { return } // If nil, useless to go further
             dispatch_async(dispatch_get_main_queue()) {
                 // Changing the image only if the cell is on screen
                 if cell.indexPath == indexPath {
-                    cell.imageView.image = image;
+                    cell.imageView.image = image
                 }
             }
         }
