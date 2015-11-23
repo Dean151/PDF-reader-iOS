@@ -41,6 +41,10 @@ class PDFReaderViewController: UIViewController, WKNavigationDelegate {
         
         self.webview = WKWebView(frame: self.view.bounds)
         self.webview.navigationDelegate = self
+        if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
+             // Preventing having page under Navigation Controller
+            self.webview.scrollView.contentInset = UIEdgeInsets(top: navBarOffset, left: 0, bottom: 0, right: 0)
+        }
         self.view.addSubview(self.webview)
         
         self.configureView()
