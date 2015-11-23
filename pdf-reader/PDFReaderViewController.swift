@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import WebKit
 
-class PDFReaderViewController: UIViewController, UIWebViewDelegate {
+class PDFReaderViewController: UIViewController, WKNavigationDelegate {
 
-    @IBOutlet weak var webview: UIWebView!
     @IBOutlet weak var overviewButton: UIBarButtonItem!
+    var webview: WKWebView!
     
     var shouldShowPage: Int?
     var shouldReload = false
@@ -28,7 +29,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     func configureView() {
         // Update the user interface for the detail item.
         guard let pdf = self.pdf else {
-            print("no pdf")
+            print("no pdf");
             return
         }
         self.navigationItem.title = pdf.name
@@ -37,7 +38,11 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.webview.delegate = self
+        
+        self.webview = WKWebView(frame: self.view.bounds)
+        self.webview.navigationDelegate = self
+        self.view.addSubview(self.webview)
+        
         self.configureView()
     }
     
@@ -81,7 +86,7 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         }
     }
     
-    func webViewDidFinishLoad(webView: UIWebView) {
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         self.changePage()
     }
     
@@ -115,7 +120,10 @@ class PDFReaderViewController: UIViewController, UIWebViewDelegate {
         let pageHeight = (allHeight-allPadding)/CGFloat(nbPages)
         
         if page <= nbPages && page >= 0 {
-            let offsetPoint = CGPointMake(0, (paddingSize+pageHeight)*CGFloat(page-1))
+            var offsetPoint = CGPointMake(0, (paddingSize+pageHeight)*CGFloat(page-1))
+            if let navBarOffset = self.navigationController?.navigationBar.frame.size.height {
+                offsetPoint.y -= navBarOffset + paddingSize // Preventing having page under Navigation Controller
+            }
             self.webview.scrollView.setContentOffset(offsetPoint, animated: false)
         }
     }
